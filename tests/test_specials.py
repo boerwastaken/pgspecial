@@ -1,7 +1,7 @@
   #!/usr/bin/python
   # -*- coding: utf-8 -*-
 
-from dbutils import dbtest, POSTGRES_USER, foreign_db_environ
+from dbutils import dbtest, POSTGRES_USER, foreign_db_environ, fdw_test
 import itertools
 
 objects_listing_headers = ['Schema', 'Name', 'Type', 'Owner', 'Size', 'Description']
@@ -554,7 +554,7 @@ def test_slash_sf_verbose(executor):
     expected = [title, rows, headers, status]
     assert results == expected
 
-@dbtest
+@fdw_test
 def test_slash_dE(executor):
 
     with foreign_db_environ():
@@ -566,7 +566,7 @@ def test_slash_dE(executor):
         expected = [title, rows, headers, status]
         assert results == expected
 
-@dbtest
+@fdw_test
 def test_slash_dE_with_pattern(executor):
 
     with foreign_db_environ():
@@ -587,7 +587,7 @@ def test_slash_dE_with_pattern(executor):
         expected = [title, rows, headers, status]
         assert results == expected
 
-@dbtest
+@fdw_test
 def test_slash_dE_verbose(executor):
 
     with foreign_db_environ():
