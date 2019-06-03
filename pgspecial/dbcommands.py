@@ -726,7 +726,20 @@ def describe_one_table_details(cur, schema_name, relation_name, oid, verbose):
     else:
         suffix = "''"
 
-    if cur.connection.server_version >= 100000:
+    if cur.connection.server_version >= 120000:
+        sql = """SELECT c.relchecks, c.relkind, c.relhasindex,
+                    c.relhasrules, c.relhastriggers, true,
+                    %s,
+                    c.reltablespace,
+                    CASE WHEN c.reloftype = 0 THEN ''
+                        ELSE c.reloftype::pg_catalog.regtype::pg_catalog.text
+                    END,
+                    c.relpersistence,
+                    c.relispartition
+                 FROM pg_catalog.pg_class c
+                 LEFT JOIN pg_catalog.pg_class tc ON (c.reltoastrelid = tc.oid)
+                 WHERE c.oid = '%s'""" % (suffix, oid)
+    elif cur.connection.server_version >= 100000:
         sql = """SELECT c.relchecks, c.relkind, c.relhasindex,
                     c.relhasrules, c.relhastriggers, c.relhasoids,
                     %s,
